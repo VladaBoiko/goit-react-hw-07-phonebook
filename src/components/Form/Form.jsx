@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { addContacts } from 'redux/contactsSlice';
+import { addContacts } from 'redux/operations';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Input, Forma, Label, Button, ErMessage } from './Form.styled';
@@ -9,12 +9,14 @@ const schema = yup.object().shape({
 });
 const formValues = {
   name: '',
-  number: '',
+  phone: '',
 };
 
 export const AddForm = () => {
+  console.log('addForm');
   const dispatch = useDispatch();
   const handleSubmit = (values, { resetForm }) => {
+    console.log(values);
     dispatch(addContacts(values));
     resetForm();
   };
@@ -41,7 +43,7 @@ export const AddForm = () => {
           Number
           <Input
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required

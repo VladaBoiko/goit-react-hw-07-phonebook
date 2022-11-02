@@ -4,6 +4,7 @@ import { Section } from './SectionWithTitle/SectionWithTitle';
 import { ContactList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
 export default function App() {
+  console.log('app');
   return (
     <div
       style={{

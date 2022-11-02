@@ -1,8 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getContacts, getFilter } from 'redux/selectors';
 import { ContactItem } from '../ContactItem/ContactItem';
 import { List } from './ContactsList.styled';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operations';
 
 const filtered = (contacts, filter) => {
   let filterContacts = null;
@@ -12,7 +14,7 @@ const filtered = (contacts, filter) => {
   }
   const normalizedFilter = filter.toLowerCase();
   filterContacts = contacts.filter(contact =>
-    contact.text.name.toLowerCase().includes(normalizedFilter)
+    contact.name.toLowerCase().includes(normalizedFilter)
   );
   if (filterContacts.length < 1) {
     Notify.warning('No matches =(');
@@ -21,18 +23,22 @@ const filtered = (contacts, filter) => {
 };
 
 export const ContactList = () => {
-  const states = useSelector(getContacts);
+  const dispatch = useDispatch();
+  const { items } = useSelector(getContacts);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
   const filter = useSelector(getFilter);
-  const visibleContacts = filtered(states.contacts, filter.filter);
+  const visibleContacts = filtered(items, filter.filter);
   return (
     <List>
       {visibleContacts.map(state => {
-        console.log(state);
         return (
           <ContactItem
-            name={state.text.name}
+            name={state.name}
             key={state.id}
-            number={state.text.number}
+            number={state.phone}
             id={state.id}
           />
         );
